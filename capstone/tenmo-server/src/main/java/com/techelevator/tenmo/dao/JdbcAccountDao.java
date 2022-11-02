@@ -36,9 +36,9 @@ public class JdbcAccountDao  implements  AccountDao{
     }
 
     @Override
-    public Account findByAccountId(long id) {
+    public Account findAccountByUserId(int id) {
         Account findAccount  = new Account();
-        final String sql = "SELECT account_id, user_id, balance FROM account WHERE account_id =?;";
+        final String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id =?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
         while (results.next()) {
@@ -48,7 +48,21 @@ public class JdbcAccountDao  implements  AccountDao{
         }
         return findAccount;
     }
-//TODO
+
+    @Override
+    public Account getBalanceByUserId(int id) {
+        Account balanceOfAccount = new Account();
+        final String sql = "";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);  //TODO should this be query for object since we only want the balance? Not sure how to finish this
+        while (results.next()) {
+            Account account = mapAccountFromResult(results);
+
+        }
+        return null;
+    }
+
+    //TODO
 //    @Override
 //    public Account getBalanceByAccountId(long id) {
 //        return null;
@@ -61,7 +75,8 @@ public class JdbcAccountDao  implements  AccountDao{
     private Account mapAccountFromResult(SqlRowSet mapAC) {
         Account account = new Account();
 
-        account.setId(mapAC.getLong("account_id"));
+        account.setAccountId(mapAC.getInt("account_id"));
+        account.setUserId(mapAC.getInt("user_id"));
         account.setBalance(mapAC.getBigDecimal("balance"));
         return account;
     }

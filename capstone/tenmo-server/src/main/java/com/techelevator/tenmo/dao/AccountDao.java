@@ -12,6 +12,7 @@ public interface AccountDao {
 
     List<Account> findAll();
 
-    Account findByAccountId(long id);//  Referencing User
+    Account findAccountByUserId(int id);//  Referencing User
 
+    Account getBalanceByUserId(int id);
 }
