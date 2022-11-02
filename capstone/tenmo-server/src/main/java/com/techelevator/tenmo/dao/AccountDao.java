@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface AccountDao {
 
+    Account create(int user_id);
+
     List<Account> findAll();
 
     Account findByAccountId(long id);//  Referencing User

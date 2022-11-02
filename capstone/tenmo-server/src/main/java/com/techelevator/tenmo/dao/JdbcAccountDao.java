@@ -18,6 +18,11 @@ public class JdbcAccountDao  implements  AccountDao{
 
 
     @Override
+    public Account create(int user_id) {
+        return null;
+    }
+
+    @Override
     public List<Account> findAll() {
         List<Account> allAccounts = new ArrayList<>();
        final String sql = "SELECT account_id, user_id, balance FROM account;";

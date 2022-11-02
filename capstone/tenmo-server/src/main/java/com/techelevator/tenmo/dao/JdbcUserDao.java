@@ -16,6 +16,7 @@ import java.util.List;
 public class JdbcUserDao implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
+    private AccountDao accountDao;
 
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -68,6 +69,7 @@ public class JdbcUserDao implements UserDao {
         }
 
         // TODO: Create the account record with initial balance
+        accountDao.create(newUserId);
 
         return true;
     }
