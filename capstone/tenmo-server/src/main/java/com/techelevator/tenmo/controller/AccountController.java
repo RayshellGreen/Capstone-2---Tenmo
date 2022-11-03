@@ -30,19 +30,24 @@ public class AccountController {
         return this.accountDao.findAll();
     }
 
+
     @GetMapping("/{id}")
-    public Account findAccountByUserId(@PathVariable int id) {
-        Account account = accountDao.findAccountByUserId(id);
+    public Account findAccountByUserId(@PathVariable int userId) {
+        Account account = accountDao.findAccountByUserId(userId);
         if (account == null) {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
         }
 
-        return this.accountDao.findAccountByUserId(id);
+        return this.accountDao.findAccountByUserId(userId);
     }
 
     @GetMapping("/{id}")
-    public Account getBalanceByUserId(@PathVariable int id) {
-        return null ;
+    public BigDecimal getBalanceByUserId(@PathVariable int userId) {
+        BigDecimal accountBalance = accountDao.getBalanceByUserId(userId);
+        if (accountBalance == null) { //TODO should this be a sout/ error handling
+           throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        return this.accountDao.getBalanceByUserId(userId);
     }
 
 

@@ -8,11 +8,10 @@ import java.util.List;
 
 public interface AccountDao {
 
-    Account create(int user_id);
 
     List<Account> findAll();
 
-    Account findAccountByUserId(int id);//  Referencing User
+    Account findAccountByUserId(int userId);//  Referencing User
 
-    Account getBalanceByUserId(int id);
+    BigDecimal getBalanceByUserId(int userId);
 }

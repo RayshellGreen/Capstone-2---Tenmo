@@ -7,20 +7,15 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.awt.event.MouseAdapter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class JdbcAccountDao  implements  AccountDao{
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public JdbcAccountDao(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate;}
-
-
-    @Override
-    public Account create(int user_id) {
-        return null;
-    }
 
     @Override
     public List<Account> findAll() {
@@ -36,11 +31,11 @@ public class JdbcAccountDao  implements  AccountDao{
     }
 
     @Override
-    public Account findAccountByUserId(int id) {
+    public Account findAccountByUserId(int userId) {
         Account findAccount  = new Account();
         final String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id =?;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
         while (results.next()) {
             Account account = mapAccountFromResult(results);
             findAccount= mapAccountFromResult(results);
@@ -50,28 +45,17 @@ public class JdbcAccountDao  implements  AccountDao{
     }
 
     @Override
-    public Account getBalanceByUserId(int id) {
-        Account balanceOfAccount = new Account();
-        final String sql = "";
+    public BigDecimal getBalanceByUserId(int userId) {
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);  //TODO should this be query for object since we only want the balance? Not sure how to finish this
-        while (results.next()) {
-            Account account = mapAccountFromResult(results);
+        final String sql = "SELECT balance FROM account WHERE user_id = ?; ";
 
-        }
-        return null;
+        BigDecimal accountBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
+
+        return accountBalance;
+
     }
 
-    //TODO
-//    @Override
-//    public Account getBalanceByAccountId(long id) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Account getAccountId(long id) {
-//        return null;
-//    }
+
     private Account mapAccountFromResult(SqlRowSet mapAC) {
         Account account = new Account();
 

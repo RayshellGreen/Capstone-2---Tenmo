@@ -1,7 +1,5 @@
 package com.techelevator.tenmo.model;
 
-import com.techelevator.tenmo.dao.JdbcUserDao;
-
 import java.math.BigDecimal;
 
 public class Account {
