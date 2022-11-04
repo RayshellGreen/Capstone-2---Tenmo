@@ -2,8 +2,11 @@ package com.techelevator.tenmo.controller;
 
 
 import com.techelevator.tenmo.dao.AccountDao;
+import com.techelevator.tenmo.dao.TransactionDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.User;
+import org.apache.tomcat.jni.BIOCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +21,13 @@ import java.util.List;
 public class AccountController {
     private AccountDao accountDao;
     private UserDao userDao;
+    private TransactionDao transactionDao;
 
 
-    public AccountController(AccountDao accountDao, UserDao userDao) {
+    public AccountController(AccountDao accountDao, UserDao userDao, TransactionDao transactionDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.transactionDao = transactionDao;
     }
 
     @GetMapping("")
@@ -48,6 +53,25 @@ public class AccountController {
            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return this.accountDao.getBalanceByUserId(userId);
+    }
+    @PutMapping("/{id}") //TODO - Come Back
+    public BigDecimal addToBalance(@PathVariable int userId, @RequestParam BigDecimal amount) {
+        Account userAccount = accountDao.findAccountByUserId(userId);
+        if (userAccount == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return accountDao.addToBalance(userId, amount);
+
+    }//if the id that fed into the method is not equl to the id of the princi is not the user account
+    //
+
+    @PutMapping("/{id}")
+    public BigDecimal subtractFromBalance(@PathVariable int userId, @RequestParam BigDecimal amount) {
+        Account userAccount = accountDao.findAccountByUserId(userId);
+        if (userAccount == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return accountDao.subtractFromBalance(userId, amount);
     }
 
 

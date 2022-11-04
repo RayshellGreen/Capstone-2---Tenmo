@@ -14,4 +14,8 @@ public interface AccountDao {
     Account findAccountByUserId(int userId);//  Referencing User
 
     BigDecimal getBalanceByUserId(int userId);
+
+    BigDecimal addToBalance(int userId, BigDecimal amount);
+
+    BigDecimal subtractFromBalance(int userId, BigDecimal amount);
 }
