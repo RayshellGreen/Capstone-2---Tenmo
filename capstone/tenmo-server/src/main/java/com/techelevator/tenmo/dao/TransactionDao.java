@@ -9,7 +9,7 @@ public interface TransactionDao {
 
     List<Transaction> findAll();
 
-    List<Transaction> getTransactionByTransactionId(int transactionId);
+    List<Transaction> getTransactionsByTransactionId(int transactionId);
 
     List<Transaction> getTransactionsByUserId(int userId);
 

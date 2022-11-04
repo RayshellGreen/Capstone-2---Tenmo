@@ -19,6 +19,10 @@ public class Transaction {
         this.amountIn = amountIn;
     }
 
+    public Transaction() {
+
+    }
+
     public int getTransactionId() {
         return transactionId;
     }

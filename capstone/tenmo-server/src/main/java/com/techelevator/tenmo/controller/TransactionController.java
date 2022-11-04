@@ -24,10 +24,7 @@ public class TransactionController {
 
     @PostMapping("") //TODO securing API chapter
     public Transaction startTransactionByUserId(@RequestBody Transaction transaction, Principal principal) {
-        Transaction transaction = transactionDao.
-        if (userId != principal) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account can not send to itself");
-        } else
+
         return  null;
     }
 
