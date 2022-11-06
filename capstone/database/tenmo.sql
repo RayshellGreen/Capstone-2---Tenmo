@@ -35,12 +35,17 @@ CREATE TABLE account (
 	CONSTRAINT FK_account_tenmo_user FOREIGN KEY (user_id) REFERENCES tenmuser (user_id)
 );
 
+CREATE SEQUENCE seq_transfer_id
+	INCREMENT BY 1
+	START WITH 3001
+	NO MAXVALUE;
+
 CREATE TABLE transfer (
 	transfer_id SERIAL NOT NULL PRIMARY KEY,
 	user_id_sender int NOT NULL,
 	user_id_receiver int NOT NULL,
-	amount_transferred_out decimal (13, 2) NOT NULL,
-	amount_received decimal (13, 2) NOT NULL,
+	amount decimal (13, 2) NOT NULL,
+	
 	
 	CONSTRAINT FK_transfer_account_sender FOREIGN KEY (account_id_sender) REFERENCES account (account_id),
 	CONSTRAINT FK_transfer_account_receiver FOREIGN KEY (account_id_reciever) REFERENCES account (account_id)

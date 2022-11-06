@@ -31,7 +31,7 @@ public class TransactionController {
     @GetMapping("/{id}")
     public List<Transaction> getTransactionsByTransactionId(@ PathVariable int transactionId) {
         List<Transaction> transactions = transactionDao.getTransactionsByTransactionId(transactionId);
-        
+
         return null;
     }
 
