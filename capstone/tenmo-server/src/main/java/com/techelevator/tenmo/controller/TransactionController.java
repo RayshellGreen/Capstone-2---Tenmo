@@ -23,7 +23,7 @@ public class TransactionController {
         this.accountDao = accountDao;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("")
     public List<Transaction> findAll() {
         return this.transactionDao.findAll();
     }
@@ -35,7 +35,7 @@ public class TransactionController {
         return null;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public List<Transaction> getTransactionsByUserId() {
         return null;
     }

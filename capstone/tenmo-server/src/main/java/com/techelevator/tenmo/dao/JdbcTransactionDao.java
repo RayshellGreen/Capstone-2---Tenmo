@@ -21,7 +21,7 @@ public class JdbcTransactionDao implements TransactionDao {
     public List<Transaction> findAll() {
         List<Transaction> allTransactions = new ArrayList<>();
 
-        final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount_transferred_out, amount_received FROM transfer; ";
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer; ";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while (results.next()) {
@@ -34,7 +34,7 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public List<Transaction> getTransactionsByTransactionId (int transactionId) {
         List<Transaction> transactions = new ArrayList<>();
-        final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount_transferred_out, amount_received FROM transfer WHERE transaction_id = ?; ";
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE transaction_id = ?; ";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transactionId);
 
@@ -48,7 +48,7 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
-        final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount_transferred_out, amount_received FROM transfer WHERE user_id = ?; ";
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id = ?; ";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 
@@ -71,8 +71,7 @@ public class JdbcTransactionDao implements TransactionDao {
         transaction.setTransactionId(mapT.getInt("transfer_id"));
         transaction.setSenderId(mapT.getInt("user_id_sender"));
         transaction.setReceiverId(mapT.getInt("user_id_receiver"));
-        transaction.setAmountOut(mapT.getBigDecimal("amount_transferred_out"));
-        transaction.setAmountIn(mapT.getBigDecimal("amount_received"));
+        transaction.setAmount(mapT.getBigDecimal("amount"));
 
         return transaction;
     }

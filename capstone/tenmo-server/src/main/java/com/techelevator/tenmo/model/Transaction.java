@@ -7,16 +7,14 @@ public class Transaction {
     private int transactionId;
     private int senderId;
     private int receiverId;
-    private BigDecimal amountOut;
-    private BigDecimal amountIn;
+    private BigDecimal amount;
 
     public Transaction(int transactionId, int senderId, int receiverId,
-                       BigDecimal amountOut, BigDecimal amountIn) {
+                       BigDecimal amount) {
         this.transactionId = transactionId;
         this.senderId = senderId;
         this.receiverId = receiverId;
-        this.amountOut = amountOut;
-        this.amountIn = amountIn;
+        this.amount = amount;
     }
 
     public Transaction() {
@@ -35,12 +33,8 @@ public class Transaction {
         return receiverId;
     }
 
-    public BigDecimal getAmountOut() {
-        return amountOut;
-    }
-
-    public BigDecimal getAmountIn() {
-        return amountIn;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     public void setTransactionId(int transactionId) {
@@ -55,11 +49,8 @@ public class Transaction {
         this.receiverId = receiverId;
     }
 
-    public void setAmountOut(BigDecimal amountOut) {
-        this.amountOut = amountOut;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public void setAmountIn(BigDecimal amountIn) {
-        this.amountIn = amountIn;
-    }
 }

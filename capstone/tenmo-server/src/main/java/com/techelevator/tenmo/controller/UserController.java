@@ -24,7 +24,7 @@ public class UserController {
         return userDao.findAll();
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/user/{username}")
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
     }

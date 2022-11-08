@@ -45,7 +45,7 @@ public class AccountController {
         return this.accountDao.findAccountByUserId(userId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/balance/{id}")
     public BigDecimal getBalanceByUserId(@PathVariable int userId) {
         BigDecimal accountBalance = accountDao.getBalanceByUserId(userId);
         if (accountBalance == null) { //TODO should this be a sout/ error handling
@@ -53,7 +53,7 @@ public class AccountController {
         }
         return this.accountDao.getBalanceByUserId(userId);
     }
-    @PutMapping("/{id}") //TODO - Come Back
+    @PutMapping("/balance/{id}") //TODO - Come Back
     public BigDecimal addToBalance(@PathVariable int userId, @RequestParam BigDecimal amount) {
         Account userAccount = accountDao.findAccountByUserId(userId);
         if (userAccount == null) {
