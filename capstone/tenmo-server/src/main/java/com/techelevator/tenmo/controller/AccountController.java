@@ -9,6 +9,7 @@ import com.techelevator.tenmo.model.User;
 import org.apache.tomcat.jni.BIOCallback;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/account")
 public class AccountController {
     private AccountDao accountDao;
@@ -31,11 +33,12 @@ public class AccountController {
 
     @GetMapping("")
     public List<Account> getAccountList() {
-        return this.accountDao.findAll();
+        return this.accountDao.listAllAccounts();
     }
 
-
-    @GetMapping("/{id}")
+    //TODO is this needed? Maybe should be username?
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/{userId}")
     public Account findAccountByUserId(@PathVariable int userId) {
         Account account = accountDao.findAccountByUserId(userId);
         if (account == null) {
@@ -44,8 +47,8 @@ public class AccountController {
 
         return this.accountDao.findAccountByUserId(userId);
     }
-
-    @GetMapping("/balance/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/{userId}/balance")
     public BigDecimal getBalanceByUserId(@PathVariable int userId) {
         BigDecimal accountBalance = accountDao.getBalanceByUserId(userId);
         if (accountBalance == null) { //TODO should this be a sout/ error handling
@@ -53,35 +56,42 @@ public class AccountController {
         }
         return this.accountDao.getBalanceByUserId(userId);
     }
-    @PutMapping("/balance/{id}") //TODO - Come Back
-    public BigDecimal addToBalance(@PathVariable int userId, @RequestParam BigDecimal amount) {
-        Account userAccount = accountDao.findAccountByUserId(userId);
+
+    //TODO needs Preauth??
+    @PutMapping("/balance/{receiverUserId}")
+    public BigDecimal addToBalance(@PathVariable int receiverUserId, @RequestParam BigDecimal amount) {
+        Account userAccount = accountDao.findAccountByUserId(receiverUserId);
         if (userAccount == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return accountDao.addToBalance(userId, amount);
+        return accountDao.addToBalance(amount, receiverUserId);
 
-    }//if the id that fed into the method is not equl to the id of the princi is not the user account
+    }//if the id that fed into the method is not equal to the id of the principle is not the user account
     //
 
-    @PutMapping("/{id}")
-    public BigDecimal subtractFromBalance(@PathVariable int userId, @RequestParam BigDecimal amount) {
-        Account userAccount = accountDao.findAccountByUserId(userId);
+
+
+//
+//    public BigDecimal receiveFunds (@PathVariable int senderId, @PathVariable int receiverId @RequestParam BigDecimal transferAmount) {
+//        Int currentBalance
+//        Int finalBalance
+//        currentBalance + transferAmount = finalBalance
+//        final balance is the new value of the receivers's account balance
+//
+//    }
+//
+//    public BigDecimal transferFunds (@PathVariable int senderAccountId, @PathVariable int senderId, @PathVariable int receiverAccountId, @PathVariable int receiverId @RequestParam BigDecimal transferAmount) {
+//        accountDao.sendFunds(senderId, receiverId, transferAmount);
+//        accountDao.receiveFunds(senderId, receiverId, transferAmount);
+//    }
+
+
+    @PutMapping("/balance/{senderUserId}")
+    public BigDecimal subtractFromBalance(@PathVariable int senderUserId, @RequestParam BigDecimal amount) {
+        Account userAccount = accountDao.findAccountByUserId(senderUserId);
         if (userAccount == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return accountDao.subtractFromBalance(userId, amount);
+        return accountDao.subtractFromBalance(amount, senderUserId);
     }
-
-
-
-    //Below is for future creation
-/*
-TODO  @GetMapping("/{id}")
-    public Account getBalanceByAccountId(@PathVariable long id) {
-        return this.accountDao.getBalanceByAccountId(id);
-    }
-*/
-
-
 }

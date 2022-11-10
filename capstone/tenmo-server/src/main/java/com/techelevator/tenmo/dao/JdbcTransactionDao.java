@@ -4,6 +4,8 @@ import com.techelevator.tenmo.model.Transaction;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
-        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id = ?; ";
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ?; "; //or(and) user_id_receiver??
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 
@@ -60,9 +62,32 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     @Override
-    public Transaction createTransaction(int senderUserId, int receiverUserId, BigDecimal amount) {
+    public BigDecimal sendFunds(int senderId, int receiverId, BigDecimal amount) {
         return null;
     }
+
+
+    @Override
+    public Transaction createTransaction(Transaction transaction) {
+//        Transaction transaction = new Transaction();
+        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
+                "VALUES (?, ?, ?); ";
+        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
+        return transaction;
+    }
+
+
+//    public BigDecimal sendFunds(int senderUserId, int receiverUserId, BigDecimal amount) {
+//
+//        BigDecimal currentBalance =
+//                Int finalBalance
+//        currentBalance - transferAmount = finalBalance
+//        if transfer amount is <= 0, that isn't allowed
+//        final balance is the new value of the sender's account balance
+//        if the final balance < 0, I don't have enough money throw error
+//
+//
+//    }
 
 
     private Transaction mapTransactionFromResult(SqlRowSet mapT) {
@@ -75,4 +100,5 @@ public class JdbcTransactionDao implements TransactionDao {
 
         return transaction;
     }
+
 }

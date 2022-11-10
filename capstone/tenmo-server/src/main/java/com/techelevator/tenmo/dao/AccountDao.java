@@ -1,7 +1,6 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,13 +8,19 @@ import java.util.List;
 public interface AccountDao {
 
 
-    List<Account> findAll();
+    public List<Account> listAllAccounts();
 
-    Account findAccountByUserId(int userId);//  Referencing User
+    public Account findAccountByUserId(int userId);//  Referencing User
 
-    BigDecimal getBalanceByUserId(int userId);
+    public BigDecimal getBalanceByUserId(int userId);
 
-    BigDecimal addToBalance(int userId, BigDecimal amount);
+    BigDecimal addToBalance(BigDecimal amount, int userId);
 
-    BigDecimal subtractFromBalance(int userId, BigDecimal amount);
+    BigDecimal subtractFromBalance(BigDecimal amount, int userId);
+
+    boolean hasSufficientFunds(int userId, BigDecimal transferAmount);
+
+
+
+
 }

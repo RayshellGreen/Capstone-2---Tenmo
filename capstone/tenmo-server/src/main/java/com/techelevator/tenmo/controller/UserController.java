@@ -20,18 +20,20 @@ public class UserController {
     }
 
     @GetMapping("")
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<User> findAllUsernames() {
+        return userDao.findAllUsernames();
     }
-
+ //TODO is this needed?
+    @GetMapping("/{username}")
+    public int findIdByUsername(String username) {
+    return userDao.findIdByUsername(username);
+}
     @GetMapping("/user/{username}")
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
     }
-    @GetMapping("/{username}")
-    public int findIdByUsername(String username) {
-        return userDao.findIdByUsername(username);
-    }
+
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public  boolean created(String username, String password) {

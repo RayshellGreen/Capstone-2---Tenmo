@@ -21,7 +21,31 @@ public class JdbcUserDao implements UserDao {
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+    @Override
+    public List<User> findAllUsernames() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT username FROM tenmo_user;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()) {
+            User user = mapRowToUser(results);
+            users.add(user);
+        }
+        return users;
+    }
 
+    @Override
+    public List<String> listAllUsernames() {
+        List<String> names = new ArrayList<>();
+        String sql = "SELECT username FROM tenmo_user;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while (results.next()) {
+            User user = new User();
+            user.setUsername(results.getString("username"));
+            names.add(user.getUsername());
+        }
+        return names;
+    }
+    //TODO is this needed?
     @Override
     public int findIdByUsername(String username) {
         String sql = "SELECT user_id FROM tenmo_user WHERE username ILIKE ?;";
@@ -34,18 +58,6 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-        while(results.next()) {
-            User user = mapRowToUser(results);
-            users.add(user);
-        }
-        return users;
-    }
-
-    @Override
     public User findByUsername(String username) throws UsernameNotFoundException {
         String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE username ILIKE ?;";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
@@ -54,6 +66,7 @@ public class JdbcUserDao implements UserDao {
         }
         throw new UsernameNotFoundException("User " + username + " was not found.");
     }
+
 
     @Override
     public boolean create(String username, String password) {
@@ -89,4 +102,6 @@ public class JdbcUserDao implements UserDao {
         user.setAuthorities("USER");
         return user;
     }
+
+
 }

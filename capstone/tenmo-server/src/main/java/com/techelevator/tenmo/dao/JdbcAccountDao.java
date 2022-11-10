@@ -1,12 +1,10 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
-import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ public class JdbcAccountDao  implements  AccountDao{
     public JdbcAccountDao(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate;}
 
     @Override
-    public List<Account> findAll() {
+    public List<Account> listAllAccounts() {
         List<Account> allAccounts = new ArrayList<>();
        final String sql = "SELECT account_id, user_id, balance FROM account;";
 
@@ -55,8 +53,8 @@ public class JdbcAccountDao  implements  AccountDao{
 
     }
 
-    @Override
-    public BigDecimal addToBalance(int userId, BigDecimal amount) {
+    @Override //receiving funds
+    public BigDecimal addToBalance(BigDecimal amount, int userId) {
         final String sql = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
 
         BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
@@ -64,13 +62,21 @@ public class JdbcAccountDao  implements  AccountDao{
         return newBalance;
     }
 
-    @Override
-    public BigDecimal subtractFromBalance(int userId, BigDecimal amount) {
+    @Override //sendingfunds
+    public BigDecimal subtractFromBalance(BigDecimal amount, int userId) {
         final String sql = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
 
         BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
 
         return newBalance;
+    }
+
+
+    @Override
+    public boolean hasSufficientFunds(int userId, BigDecimal transferAmount) {
+        Account fromAcc = findAccountByUserId(userId);
+        BigDecimal balance = fromAcc.getBalance();
+        return balance.compareTo(transferAmount) >= 0;
     }
 
 
@@ -82,5 +88,6 @@ public class JdbcAccountDao  implements  AccountDao{
         account.setBalance(mapAC.getBigDecimal("balance"));
         return account;
     }
+
 
 }
