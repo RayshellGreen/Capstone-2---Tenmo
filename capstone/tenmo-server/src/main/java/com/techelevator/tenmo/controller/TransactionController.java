@@ -64,19 +64,19 @@ public class TransactionController {
         }
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("") //TODO need to thow an error if user don't have money
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        Transaction transaction1 = transactionDao.createTransaction(transaction);
-        try {
-            sendFunds(transaction);
-        } catch (InsufficientFundsException ife) {
-            System.out.println(ife);
-
-        }
-        return transaction1;
-    }
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    @PostMapping("") //TODO need to thow an error if user don't have money
+//    public Transaction createTransaction(@RequestBody Transaction transaction) {
+//        Transaction transaction1 = transactionDao.createTransaction(transaction);
+//        try {
+//            sendFunds(transaction);
+//        } catch (InsufficientFundsException ife) {
+//            System.out.println(ife);
+//
+//        }
+//        return transaction1;
+//    }
 
 
 }

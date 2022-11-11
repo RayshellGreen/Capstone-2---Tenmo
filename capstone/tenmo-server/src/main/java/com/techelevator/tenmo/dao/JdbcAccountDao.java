@@ -54,21 +54,17 @@ public class JdbcAccountDao  implements  AccountDao{
     }
 
     @Override //receiving funds
-    public BigDecimal addToBalance(BigDecimal amount, int userId) {
+    public void addToBalance(BigDecimal amount, int userId) {
         final String sql = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
 
         BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
-
-        return newBalance;
     }
 
     @Override //sendingfunds
-    public BigDecimal subtractFromBalance(BigDecimal amount, int userId) {
+    public void subtractFromBalance(BigDecimal amount, int userId) {
         final String sql = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
 
         BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
-
-        return newBalance;
     }
 
 

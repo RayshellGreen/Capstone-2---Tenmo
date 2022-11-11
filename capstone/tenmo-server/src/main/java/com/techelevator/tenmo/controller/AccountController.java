@@ -57,16 +57,16 @@ public class AccountController {
         return this.accountDao.getBalanceByUserId(userId);
     }
 
-    //TODO needs Preauth??
-    @PutMapping("/balance/{receiverUserId}")
-    public BigDecimal addToBalance(@PathVariable int receiverUserId, @RequestParam BigDecimal amount) {
-        Account userAccount = accountDao.findAccountByUserId(receiverUserId);
-        if (userAccount == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return accountDao.addToBalance(amount, receiverUserId);
+//    //TODO needs Preauth??
+//    @PutMapping("/balance/{receiverUserId}")
+//    public BigDecimal addToBalance(@PathVariable int receiverUserId, @RequestParam BigDecimal amount) {
+//        Account userAccount = accountDao.findAccountByUserId(receiverUserId);
+//        if (userAccount == null) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//        return accountDao.addToBalance(amount, receiverUserId);
 
-    }//if the id that fed into the method is not equal to the id of the principle is not the user account
+//    }//if the id that fed into the method is not equal to the id of the principle is not the user account
     //
 
 
@@ -86,12 +86,12 @@ public class AccountController {
 //    }
 
 
-    @PutMapping("/balance/{senderUserId}")
-    public BigDecimal subtractFromBalance(@PathVariable int senderUserId, @RequestParam BigDecimal amount) {
-        Account userAccount = accountDao.findAccountByUserId(senderUserId);
-        if (userAccount == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return accountDao.subtractFromBalance(amount, senderUserId);
-    }
+//    @PutMapping("/balance/{senderUserId}")
+//    public BigDecimal subtractFromBalance(@PathVariable int senderUserId, @RequestParam BigDecimal amount) {
+//        Account userAccount = accountDao.findAccountByUserId(senderUserId);
+//        if (userAccount == null) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//        return accountDao.subtractFromBalance(amount, senderUserId);
+//    }
 }

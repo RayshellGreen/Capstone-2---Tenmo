@@ -8,15 +8,15 @@ import java.util.List;
 public interface AccountDao {
 
 
-    public List<Account> listAllAccounts();
+     List<Account> listAllAccounts();
 
-    public Account findAccountByUserId(int userId);//  Referencing User
+     Account findAccountByUserId(int userId);//  Referencing User
 
-    public BigDecimal getBalanceByUserId(int userId);
+     BigDecimal getBalanceByUserId(int userId);
 
-    BigDecimal addToBalance(BigDecimal amount, int userId);
+    void addToBalance(BigDecimal amount, int userId);
 
-    BigDecimal subtractFromBalance(BigDecimal amount, int userId);
+    void subtractFromBalance(BigDecimal amount, int userId);
 
     boolean hasSufficientFunds(int userId, BigDecimal transferAmount);
 
