@@ -38,41 +38,20 @@ public class TransactionController {
     public List<Transaction> getTransactionsByTransactionId(@PathVariable int transactionId) {
         List<Transaction> transactions = transactionDao.getTransactionsByTransactionId(transactionId);
 
-        return null;
+        return transactions;
     }
 
     //TODO
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{id}")
-    public List<Transaction> getTransactionsByUserId() {
-        return null;
+    public List<Transaction> getTransactionsByUserId(@PathVariable int userid) {
+        List<Transaction> transactions = transactionDao.getTransactionsByUserId(userid);
+        return transactions;
     }
-
-//    @PreAuthorize("hasRole('ROLE_USER')")
-//    @PostMapping("/send") //TODO put into JDBC?? Idont think so it is calling on other methods that will go into JDBC
-//    public void sendFunds(@RequestBody Transaction transaction throws InsufficientFundsException {//replaced Transaction transaction parameter
-//        Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
-//        Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
-//        if (sender != null && receiver != null) {
-//            if (accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
-//                transactionDao.sendFunds(senderId, receiverId, amount);
-//            }
-//        } else {
-//            throw new InsufficientFundsException();
-//
-//    }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/send")
     public void sendFunds(@RequestBody Transaction transaction) throws InsufficientFundsException {
-
-//            transactionDao.sendFunds(transaction);
-//            try{
-//                updateAccountBalances(transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
-//            } catch (InsufficientFundsException ife) {
-//            System.out.println(ife);
-//        }
-
 
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
@@ -81,34 +60,11 @@ public class TransactionController {
                 accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
                 accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
                 transactionDao.sendFunds(transaction);
-//            }
             } else {
                 throw new InsufficientFundsException();
             }
         }
 
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasRole('ROLE_USER')")
-//    @PostMapping("") //TODO need to thow an error if user don't have money
-//    public Transaction createTransaction(@RequestBody Transaction transaction) {
-//        Transaction transaction1 = transactionDao.createTransaction(transaction);
-//        try {
-//            sendFunds(transaction);
-//        } catch (InsufficientFundsException ife) {
-//            System.out.println(ife);
-//
-//        }
-//        return transaction1;
-//    }
 
     }
-    //TODO might have to rework senderId.receiverID. Idk if its actually pointing to the right thing
-//    @PutMapping("") //TODO put something here
-//    private void updateAccountBalances(int senderId, int receiverId, BigDecimal amount) throws InsufficientFundsException {
-//        if (accountDao.havesSufficientFunds(senderId, amount)) {
-//            accountDao.addToBalance(amount, senderId);
-//            accountDao.subtractFromBalance(amount, receiverId);
-//        }
-//    }
-
 }

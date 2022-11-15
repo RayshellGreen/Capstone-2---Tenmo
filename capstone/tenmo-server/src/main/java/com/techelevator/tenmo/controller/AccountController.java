@@ -36,7 +36,7 @@ public class AccountController {
         return this.accountDao.listAllAccounts();
     }
 
-    //TODO is this needed? Maybe should be username?
+    //* TODO is this needed? Maybe should be username?
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{userId}")
     public Account findAccountByUserId(@PathVariable int userId) {
@@ -56,42 +56,6 @@ public class AccountController {
         }
         return this.accountDao.getBalanceByUserId(userId);
     }
-
-//    //TODO needs Preauth??
-//    @PutMapping("/balance/{receiverUserId}")
-//    public BigDecimal addToBalance(@PathVariable int receiverUserId, @RequestParam BigDecimal amount) {
-//        Account userAccount = accountDao.findAccountByUserId(receiverUserId);
-//        if (userAccount == null) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//        }
-//        return accountDao.addToBalance(amount, receiverUserId);
-
-//    }//if the id that fed into the method is not equal to the id of the principle is not the user account
-    //
-
-
-
-//
-//    public BigDecimal receiveFunds (@PathVariable int senderId, @PathVariable int receiverId @RequestParam BigDecimal transferAmount) {
-//        Int currentBalance
-//        Int finalBalance
-//        currentBalance + transferAmount = finalBalance
-//        final balance is the new value of the receivers's account balance
-//
-//    }
-//
-//    public BigDecimal transferFunds (@PathVariable int senderAccountId, @PathVariable int senderId, @PathVariable int receiverAccountId, @PathVariable int receiverId @RequestParam BigDecimal transferAmount) {
-//        accountDao.sendFunds(senderId, receiverId, transferAmount);
-//        accountDao.receiveFunds(senderId, receiverId, transferAmount);
-//    }
-
-
-//    @PutMapping("/balance/{senderUserId}")
-//    public BigDecimal subtractFromBalance(@PathVariable int senderUserId, @RequestParam BigDecimal amount) {
-//        Account userAccount = accountDao.findAccountByUserId(senderUserId);
-//        if (userAccount == null) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//        }
-//        return accountDao.subtractFromBalance(amount, senderUserId);
-//    }
 }
+
+

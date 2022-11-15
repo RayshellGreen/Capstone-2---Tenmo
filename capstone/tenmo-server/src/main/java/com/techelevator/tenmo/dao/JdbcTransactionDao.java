@@ -51,7 +51,7 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
-        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ?; "; //or(and) user_id_receiver??
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ? OR user_id_receiver = ?; ";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 
@@ -62,7 +62,6 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactionsByUser;
     }
 
-
     @Override
     public void sendFunds(Transaction transaction) {
         final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
@@ -71,49 +70,6 @@ public class JdbcTransactionDao implements TransactionDao {
 
 
     }
-
-
-//    public void sendFunds(int senderId, int receiverId, BigDecimal amount) {
-//         //replaced Transaction transaction parameter
-//    }
-//        String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-//                "VALUES (?, ?, ?); " ;
-//
-//        try {
-//            String sql1 = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
-//            jdbcTemplate.update(sql, amount, receiverId); //replaced transaction.get..
-//
-//            String sql2 = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
-//
-//            jdbcTemplate.update(sql, amount, senderId);
-//        }catch (ResourceAccessException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
-
-//    @Override //TODO may need to uncomment
-//    public Transaction createTransaction(Transaction transaction) {
-////        Transaction transaction = new Transaction();
-//        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-//                "VALUES (?, ?, ?); ";
-//        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
-//        return transaction;
-//    }
-
-
-//    public BigDecimal sendFunds(int senderUserId, int receiverUserId, BigDecimal amount) {
-//
-//        BigDecimal currentBalance =
-//                Int finalBalance
-//        currentBalance - transferAmount = finalBalance
-//        if transfer amount is <= 0, that isn't allowed
-//        final balance is the new value of the sender's account balance
-//        if the final balance < 0, I don't have enough money throw error
-//
-//
-//    }
-
 
     private Transaction mapTransactionFromResult(SqlRowSet mapT) {
         Transaction transaction = new Transaction();

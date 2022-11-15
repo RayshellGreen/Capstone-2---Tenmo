@@ -13,7 +13,7 @@ public interface AccountDao {
      Account findAccountByUserId(int userId);//  Referencing User
 
      BigDecimal getBalanceByUserId(int userId);
-//TODO may need to uncomment
+
     void addToBalance(BigDecimal amount, int userId);
 
     void subtractFromBalance(BigDecimal amount, int userId);

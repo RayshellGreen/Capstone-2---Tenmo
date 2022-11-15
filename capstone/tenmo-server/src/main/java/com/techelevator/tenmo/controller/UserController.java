@@ -23,7 +23,7 @@ public class UserController {
     public List<User> findAllUsernames() {
         return userDao.findAllUsernames();
     }
- //TODO is this needed?
+ //TODO is this needed? PreAuth?
     @GetMapping("/{username}")
     public int findIdByUsername(String username) {
     return userDao.findIdByUsername(username);
