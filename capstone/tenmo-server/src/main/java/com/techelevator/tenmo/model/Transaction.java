@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class Transaction {
 
     private int transactionId;
-    private int senderId;
-    private int receiverId;
+    private int senderId; //sender account_id
+    private int receiverId; //receiver account_id
     private BigDecimal amount;
 
     public Transaction(int transactionId, int senderId, int receiverId,

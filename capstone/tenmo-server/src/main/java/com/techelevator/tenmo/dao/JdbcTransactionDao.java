@@ -34,7 +34,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return allTransactions;
     }
 
-    @Override
+    @Override //TODO does this work
     public List<Transaction> getTransactionsByTransactionId (int transactionId) {
         List<Transaction> transactions = new ArrayList<>();
         final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE transaction_id = ?; ";
@@ -48,7 +48,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactions;
     }
 
-    @Override
+    @Override //TODO does this work? Redo SQL statement?
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
         final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ?; "; //or(and) user_id_receiver??
@@ -65,8 +65,8 @@ public class JdbcTransactionDao implements TransactionDao {
 
     @Override
     public void sendFunds(Transaction transaction) {
-        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-                "VALUES (?, ?, ?); ";
+        final String sql = "INSERT INTO transfer (account_id_sender, account_id_receiver, amount)" +
+                "VALUES ((select account_id from account where user_id = ?), (select account_id from account where user_id = ?), ?); ";
         jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
 
 

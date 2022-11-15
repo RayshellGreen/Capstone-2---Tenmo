@@ -62,30 +62,32 @@ public class TransactionController {
 //
 //    }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/send")
-    public void sendFunds(@RequestBody Transaction transaction) throws InsufficientFundsException {
-
-//            transactionDao.sendFunds(transaction);
-//            try{
-//                updateAccountBalances(transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
-//            } catch (InsufficientFundsException ife) {
-//            System.out.println(ife);
-//        }
-
+    public void sendFunds(@RequestBody Transaction transaction) {
 
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
+
         if (sender != null && receiver != null) {
-            if (accountDao.hasSufficientFunds(sender.getUserId(), transaction.getAmount())) {
-                accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
-                accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
-                transactionDao.sendFunds(transaction);
-//            }
-            } else {
-                throw new InsufficientFundsException();
+            if (sender.getUserId() != receiver.getUserId()) {
+                try {
+                    if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
+                        throw new InsufficientFundsException();
+                    }
+                    accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
+                    accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
+                    transactionDao.sendFunds(transaction);
+
+                } catch (InsufficientFundsException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
+    }
+}
 
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasRole('ROLE_USER')")
@@ -101,8 +103,8 @@ public class TransactionController {
 //        return transaction1;
 //    }
 
-    }
-    //TODO might have to rework senderId.receiverID. Idk if its actually pointing to the right thing
+
+//TODO might have to rework senderId.receiverID. Idk if its actually pointing to the right thing
 //    @PutMapping("") //TODO put something here
 //    private void updateAccountBalances(int senderId, int receiverId, BigDecimal amount) throws InsufficientFundsException {
 //        if (accountDao.havesSufficientFunds(senderId, amount)) {
@@ -111,4 +113,4 @@ public class TransactionController {
 //        }
 //    }
 
-}
+

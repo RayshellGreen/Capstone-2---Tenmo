@@ -30,12 +30,12 @@ public class JdbcAccountDao  implements  AccountDao{
 
     @Override
     public Account findAccountByUserId(int userId) {
-        Account findAccount  = new Account();
+        Account findAccount  = null;
         final String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id =?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-        while (results.next()) {
-            Account account = mapAccountFromResult(results);
+        if (results.next()) {
+//            Account account = mapAccountFromResult(results);
             findAccount= mapAccountFromResult(results);
 
         }
@@ -56,25 +56,24 @@ public class JdbcAccountDao  implements  AccountDao{
 
     @Override //receiving funds //TODO may need to uncomment
     public void addToBalance(BigDecimal amount, int userId) {
-        final String sql = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
+        final String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?; ";
 
        jdbcTemplate.update(sql, amount, userId);
-        BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
+//        BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
 
     @Override //sendingfunds //TODO mayneed to uncomment
     public void subtractFromBalance(BigDecimal amount, int userId) {
-        final String sql = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
+        final String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?; ";
 
         jdbcTemplate.update(sql, amount, userId);
-        BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
+//        BigDecimal newBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
     }
 
 
     @Override
     public boolean hasSufficientFunds(int userId, BigDecimal transferAmount) {
-        Account fromAcc = findAccountByUserId(userId);
-        BigDecimal balance = fromAcc.getBalance();
+        BigDecimal balance = getBalanceByUserId(userId);
         return balance.compareTo(transferAmount) >= 0;
     }
 
