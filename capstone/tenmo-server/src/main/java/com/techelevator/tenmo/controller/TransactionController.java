@@ -38,14 +38,16 @@ public class TransactionController {
     public List<Transaction> getTransactionsByTransactionId(@PathVariable int transactionId) {
         List<Transaction> transactions = transactionDao.getTransactionsByTransactionId(transactionId);
 
-        return null;
+        return transactions;
     }
 
     //TODO
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{id}")
-    public List<Transaction> getTransactionsByUserId() {
-        return null;
+    public List<Transaction> getTransactionsByUserId(@PathVariable int userId) {
+        List<Transaction> transactions = transactionDao.getTransactionsByUserId(userId);
+
+        return transactions;
     }
 
 //    @PreAuthorize("hasRole('ROLE_USER')")

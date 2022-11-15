@@ -35,11 +35,11 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     @Override //TODO does this work
-    public List<Transaction> getTransactionsByTransactionId (int transactionId) {
+    public List<Transaction> getTransactionsByTransactionId (int transferId) {
         List<Transaction> transactions = new ArrayList<>();
-        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE transaction_id = ?; ";
+        final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount FROM transfer WHERE transfer_id = ?; ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transactionId);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
 
         while(results.next()) {
             Transaction transaction = mapTransactionFromResult(results);
@@ -51,7 +51,7 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override //TODO does this work? Redo SQL statement?
     public List<Transaction> getTransactionsByUserId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
-        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ?; "; //or(and) user_id_receiver??
+        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ? OR user_id_receiver = ?; "; //or(and) user_id_receiver??
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
 
