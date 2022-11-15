@@ -62,11 +62,17 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactionsByUser;
     }
 
-//TODO says we need to implement send funds; why? the controller goes to other methods
+
     @Override
     public void sendFunds(Transaction transaction) {
+        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
+                "VALUES (?, ?, ?); ";
+        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
+
 
     }
+
+
 //    public void sendFunds(int senderId, int receiverId, BigDecimal amount) {
 //         //replaced Transaction transaction parameter
 //    }
@@ -86,14 +92,14 @@ public class JdbcTransactionDao implements TransactionDao {
 //    }
 
 
-    @Override //TODO may need to uncomment
-    public Transaction createTransaction(Transaction transaction) {
-//        Transaction transaction = new Transaction();
-        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-                "VALUES (?, ?, ?); ";
-        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
-        return transaction;
-    }
+//    @Override //TODO may need to uncomment
+//    public Transaction createTransaction(Transaction transaction) {
+////        Transaction transaction = new Transaction();
+//        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
+//                "VALUES (?, ?, ?); ";
+//        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
+//        return transaction;
+//    }
 
 
 //    public BigDecimal sendFunds(int senderUserId, int receiverUserId, BigDecimal amount) {

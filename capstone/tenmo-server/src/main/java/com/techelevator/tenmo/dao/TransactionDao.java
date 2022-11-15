@@ -15,8 +15,8 @@ public interface TransactionDao {
 
     public void sendFunds(Transaction transaction);
 
-//    void sendFunds(int senderId, int receiverId, BigDecimal amount);
+//    void updateAccountBalances(int senderId, int receiverId, BigDecimal amount);
 
     //TODO may need to uncomment
-    Transaction createTransaction(Transaction transaction);
+//    Transaction createTransaction(Transaction transaction);
 }

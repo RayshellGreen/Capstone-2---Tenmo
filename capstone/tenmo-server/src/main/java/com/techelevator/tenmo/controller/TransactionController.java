@@ -65,13 +65,22 @@ public class TransactionController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/send")
     public void sendFunds(@RequestBody Transaction transaction) throws InsufficientFundsException {
+
+//            transactionDao.sendFunds(transaction);
+//            try{
+//                updateAccountBalances(transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
+//            } catch (InsufficientFundsException ife) {
+//            System.out.println(ife);
+//        }
+
+
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
         if (sender != null && receiver != null) {
             if (accountDao.hasSufficientFunds(sender.getUserId(), transaction.getAmount())) {
                 accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
                 accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
-                transactionDao.createTransaction(transaction);
+                transactionDao.sendFunds(transaction);
 //            }
             } else {
                 throw new InsufficientFundsException();
@@ -93,4 +102,13 @@ public class TransactionController {
 //    }
 
     }
+    //TODO might have to rework senderId.receiverID. Idk if its actually pointing to the right thing
+//    @PutMapping("") //TODO put something here
+//    private void updateAccountBalances(int senderId, int receiverId, BigDecimal amount) throws InsufficientFundsException {
+//        if (accountDao.havesSufficientFunds(senderId, amount)) {
+//            accountDao.addToBalance(amount, senderId);
+//            accountDao.subtractFromBalance(amount, receiverId);
+//        }
+//    }
+
 }
