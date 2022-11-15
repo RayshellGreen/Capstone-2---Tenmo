@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -61,13 +62,31 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactionsByUser;
     }
 
+//TODO says we need to implement send funds; why? the controller goes to other methods
     @Override
-    public BigDecimal sendFunds(int senderId, int receiverId, BigDecimal amount) {
-        return null;
+    public void sendFunds(Transaction transaction) {
+
     }
+//    public void sendFunds(int senderId, int receiverId, BigDecimal amount) {
+//         //replaced Transaction transaction parameter
+//    }
+//        String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
+//                "VALUES (?, ?, ?); " ;
+//
+//        try {
+//            String sql1 = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
+//            jdbcTemplate.update(sql, amount, receiverId); //replaced transaction.get..
+//
+//            String sql2 = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
+//
+//            jdbcTemplate.update(sql, amount, senderId);
+//        }catch (ResourceAccessException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
 
-    @Override
+    @Override //TODO may need to uncomment
     public Transaction createTransaction(Transaction transaction) {
 //        Transaction transaction = new Transaction();
         final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +

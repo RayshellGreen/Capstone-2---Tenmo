@@ -13,7 +13,10 @@ public interface TransactionDao {
 
     List<Transaction> getTransactionsByUserId(int userId);
 
-    public BigDecimal sendFunds(int senderId, int receiverId, BigDecimal amount);
+    public void sendFunds(Transaction transaction);
 
+//    void sendFunds(int senderId, int receiverId, BigDecimal amount);
+
+    //TODO may need to uncomment
     Transaction createTransaction(Transaction transaction);
 }

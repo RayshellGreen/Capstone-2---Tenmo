@@ -48,21 +48,35 @@ public class TransactionController {
         return null;
     }
 
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    @PostMapping("/send") //TODO put into JDBC?? Idont think so it is calling on other methods that will go into JDBC
+//    public void sendFunds(@RequestBody Transaction transaction throws InsufficientFundsException {//replaced Transaction transaction parameter
+//        Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
+//        Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
+//        if (sender != null && receiver != null) {
+//            if (accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
+//                transactionDao.sendFunds(senderId, receiverId, amount);
+//            }
+//        } else {
+//            throw new InsufficientFundsException();
+//
+//    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("/send") //TODO put into JDBC?? Idont think so it is calling on other methods that will go into JDBC
+    @PostMapping("/send")
     public void sendFunds(@RequestBody Transaction transaction) throws InsufficientFundsException {
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
         if (sender != null && receiver != null) {
-//            if (accountDao.hasSufficientFunds(sender.getUserId(), transaction.getAmount())) {
+            if (accountDao.hasSufficientFunds(sender.getUserId(), transaction.getAmount())) {
                 accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
                 accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
                 transactionDao.createTransaction(transaction);
 //            }
-        } else {
-            throw new InsufficientFundsException();
+            } else {
+                throw new InsufficientFundsException();
+            }
         }
-    }
 
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasRole('ROLE_USER')")
@@ -78,5 +92,5 @@ public class TransactionController {
 //        return transaction1;
 //    }
 
-
+    }
 }
