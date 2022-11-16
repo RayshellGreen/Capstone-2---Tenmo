@@ -49,11 +49,11 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     @Override //TODO does this work? Redo SQL statement?
-    public List<Transaction> getTransactionsByUserId(int userId) {
+    public List<Transaction> getTransactionsByAccountId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
-        final String sql = "SELECT transfer_id, user_id_sender, user_id_receiver, amount FROM transfer WHERE user_id_sender = ? OR user_id_receiver = ?; "; //or(and) user_id_receiver??
+        final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount FROM transfer WHERE account_id_sender = ? OR account_id_receiver = ?; "; //or(and) user_id_receiver??
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
 
         while(results.next()) {
             Transaction transaction = mapTransactionFromResult(results);
@@ -119,8 +119,8 @@ public class JdbcTransactionDao implements TransactionDao {
         Transaction transaction = new Transaction();
 
         transaction.setTransactionId(mapT.getInt("transfer_id"));
-        transaction.setSenderId(mapT.getInt("user_id_sender"));
-        transaction.setReceiverId(mapT.getInt("user_id_receiver"));
+        transaction.setSenderId(mapT.getInt("account_id_sender"));
+        transaction.setReceiverId(mapT.getInt("account_id_receiver"));
         transaction.setAmount(mapT.getBigDecimal("amount"));
 
         return transaction;

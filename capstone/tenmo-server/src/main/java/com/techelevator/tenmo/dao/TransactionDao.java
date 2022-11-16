@@ -11,7 +11,7 @@ public interface TransactionDao {
 
     List<Transaction> getTransactionsByTransactionId(int transactionId);
 
-    List<Transaction> getTransactionsByUserId(int userId);
+    List<Transaction> getTransactionsByAccountId(int accountId);
 
     void sendFunds(Transaction transaction);
 

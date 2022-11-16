@@ -23,6 +23,8 @@ public class UserController {
     public List<User> findAllUsernames() {
         return userDao.findAllUsernames();
     }
+
+
  //TODO is this needed?
     @GetMapping("/{username}")
     public int findIdByUsername(String username) {
@@ -39,12 +41,6 @@ public class UserController {
     public  boolean created(String username, String password) {
         return userDao.create(username, password);
     }
-
-
-
-
-
-
 
 
 }

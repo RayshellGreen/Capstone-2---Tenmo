@@ -52,6 +52,7 @@ CREATE TABLE transfer (
 	
 	
 );
--- rollback; 
+
+--rollback; 
 
 COMMIT;
