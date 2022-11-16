@@ -44,27 +44,38 @@ public class TransactionController {
     //TODO
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/user/{id}")
-    public List<Transaction> getTransactionsByUserId(@PathVariable int userid) {
-        List<Transaction> transactions = transactionDao.getTransactionsByUserId(userid);
+    public List<Transaction> getTransactionsByUserId(@PathVariable int userId) {
+        List<Transaction> transactions = transactionDao.getTransactionsByUserId(userId);
+
         return transactions;
     }
 
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/send")
-    public void sendFunds(@RequestBody Transaction transaction) throws InsufficientFundsException {
+    public void sendFunds(@RequestBody Transaction transaction) {
 
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
+
         if (sender != null && receiver != null) {
-            if (accountDao.hasSufficientFunds(sender.getUserId(), transaction.getAmount())) {
-                accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
-                accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
-                transactionDao.sendFunds(transaction);
-            } else {
-                throw new InsufficientFundsException();
+            if (sender.getUserId() != receiver.getUserId()) {
+                try {
+                    if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
+                        throw new InsufficientFundsException();
+                    }
+                    accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
+                    accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
+                    transactionDao.sendFunds(transaction);
+
+                } catch (InsufficientFundsException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
-
-
     }
 }
+
+

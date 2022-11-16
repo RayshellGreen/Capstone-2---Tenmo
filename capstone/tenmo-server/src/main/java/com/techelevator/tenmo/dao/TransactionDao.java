@@ -13,6 +13,6 @@ public interface TransactionDao {
 
     List<Transaction> getTransactionsByUserId(int userId);
 
-    public void sendFunds(Transaction transaction);
+    void sendFunds(Transaction transaction);
 
 }
