@@ -31,6 +31,7 @@ public class AccountController {
         this.transactionDao = transactionDao;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
     public List<Account> getAccountList() {
         return this.accountDao.listAllAccounts();
@@ -51,7 +52,7 @@ public class AccountController {
     @GetMapping("/{userId}/balance")
     public BigDecimal getBalanceByUserId(@PathVariable int userId) {
         BigDecimal accountBalance = accountDao.getBalanceByUserId(userId);
-        if (accountBalance == null) { //TODO should this be a sout/ error handling
+        if (accountBalance == null) {
            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return this.accountDao.getBalanceByUserId(userId);

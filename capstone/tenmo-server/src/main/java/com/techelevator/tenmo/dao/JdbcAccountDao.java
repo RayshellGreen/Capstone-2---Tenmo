@@ -31,11 +31,11 @@ public class JdbcAccountDao  implements  AccountDao{
     @Override
     public Account findAccountByUserId(int userId) {
         Account findAccount  = null;
-        final String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id =?;";
+        final String sql = "SELECT account_id, user_id, balance FROM account WHERE user_id = ?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
         if (results.next()) {
-            findAccount= mapAccountFromResult(results);
+            findAccount = mapAccountFromResult(results);
 
         }
         return findAccount;

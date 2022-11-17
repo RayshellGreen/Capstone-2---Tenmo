@@ -39,7 +39,7 @@ public class Account {
     }
 
     public void setBalance(BigDecimal balance) {
-        balance = balance;
+        this.balance = balance;
     }
 
 

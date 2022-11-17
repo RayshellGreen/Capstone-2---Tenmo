@@ -33,6 +33,7 @@ public class TransactionController {
         this.userDao = userDao;
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
     public List<Transaction> findAll() {
         return this.transactionDao.findAll();
@@ -49,7 +50,7 @@ public class TransactionController {
 
     //TODO
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/user/{accountId}")
+    @GetMapping("/account/{accountId}")
     public List<Transaction> getTransactionsByAccountId(@PathVariable int accountId) {
         List<Transaction> transactions = transactionDao.getTransactionsByAccountId(accountId);
 
@@ -67,23 +68,28 @@ public class TransactionController {
 
 
         if (sender != null && receiver != null) {
-            if (sender.getUserId() != receiver.getUserId()) {
-                try {
-                    if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
-                        throw new InsufficientFundsException();
-                    } else if(transaction.getAmount().intValue() > 0 ) {
-                        accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
-                        accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
-                        transactionDao.sendFunds(transaction);
-                         } else {
-                        throw new InvalidAmount();
-                    }
+            try {
+                if (sender.getUserId() != receiver.getUserId()) {
+                    try {
+                        if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
+                            throw new InsufficientFundsException();
+                        } else if(transaction.getAmount().intValue() > 0 ) {
+                            accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
+                            accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
+                            transactionDao.sendFunds(transaction);
+                        } else {
+                            throw new InvalidAmount();
+                        }
 
-                } catch (InsufficientFundsException | InvalidAmount e) {
-                    e.printStackTrace();
+                    } catch (InsufficientFundsException | InvalidAmount e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    throw new InvalidTransfer();
                 }
-            } else {
-                throw new InvalidTransfer();
+
+            } catch (InvalidTransfer it) {
+                it.printStackTrace();
             }
 
         }

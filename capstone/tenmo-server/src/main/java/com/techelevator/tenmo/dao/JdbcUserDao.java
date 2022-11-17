@@ -22,30 +22,19 @@ public class JdbcUserDao implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
     @Override
-    public List<User> findAllUsernames() {
+    public List<User> findAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT user_id, username, password_hash FROM tenmo_user;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while(results.next()) {
-            User user = mapRowToUser(results);
-            users.add(user);
+           User user = mapRowToUser(results);
+           users.add(user);
         }
         return users;
     }
 
-    @Override
-    public List<String> listAllUsernames() {
-        List<String> names = new ArrayList<>();
-        String sql = "SELECT username FROM tenmo_user;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-        while (results.next()) {
-            User user = new User();
-            user.setUsername(results.getString("username"));
-            names.add(user.getUsername());
-        }
-        return names;
-    }
-    //TODO is this needed?
+
+    //TODO not working as expected
     @Override
     public int findIdByUsername(String username) {
         String sql = "SELECT user_id FROM tenmo_user WHERE username ILIKE ?;";
@@ -57,6 +46,7 @@ public class JdbcUserDao implements UserDao {
         }
     }
 
+    //TODO not working as expected
     @Override
     public User findByUsername(String username) throws UsernameNotFoundException {
         String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE username ILIKE ?;";

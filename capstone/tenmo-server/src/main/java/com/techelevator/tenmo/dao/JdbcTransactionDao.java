@@ -34,7 +34,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return allTransactions;
     }
 
-    @Override //TODO does this work
+
     public List<Transaction> getTransactionsByTransactionId (int transferId) {
         List<Transaction> transactions = new ArrayList<>();
         final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount FROM transfer WHERE transfer_id = ?; ";
@@ -48,7 +48,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactions;
     }
 
-    @Override //TODO does this work? Redo SQL statement?
+
     public List<Transaction> getTransactionsByAccountId(int userId) {
         List<Transaction> transactionsByUser = new ArrayList<>();
         final String sql = "SELECT transfer_id, account_id_sender, account_id_receiver, amount FROM transfer WHERE account_id_sender = ? OR account_id_receiver = ?; "; //or(and) user_id_receiver??
@@ -69,50 +69,8 @@ public class JdbcTransactionDao implements TransactionDao {
                 "VALUES ((select account_id from account where user_id = ?), (select account_id from account where user_id = ?), ?); ";
         jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
 
-
     }
 
-
-//    public void sendFunds(int senderId, int receiverId, BigDecimal amount) {
-//         //replaced Transaction transaction parameter
-//    }
-//        String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-//                "VALUES (?, ?, ?); " ;
-//
-//        try {
-//            String sql1 = "UPDATE account SET balance = (balance + ?) WHERE user_id = ?; ";
-//            jdbcTemplate.update(sql, amount, receiverId); //replaced transaction.get..
-//
-//            String sql2 = "UPDATE account SET balance = (balance - ?) WHERE user_id = ?; ";
-//
-//            jdbcTemplate.update(sql, amount, senderId);
-//        }catch (ResourceAccessException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
-
-//    @Override //TODO may need to uncomment
-//    public Transaction createTransaction(Transaction transaction) {
-////        Transaction transaction = new Transaction();
-//        final String sql = "INSERT INTO transfer (user_id_sender, user_id_receiver, amount)" +
-//                "VALUES (?, ?, ?); ";
-//        jdbcTemplate.update(sql, transaction.getSenderId(), transaction.getReceiverId(), transaction.getAmount());
-//        return transaction;
-//    }
-
-
-//    public BigDecimal sendFunds(int senderUserId, int receiverUserId, BigDecimal amount) {
-//
-//        BigDecimal currentBalance =
-//                Int finalBalance
-//        currentBalance - transferAmount = finalBalance
-//        if transfer amount is <= 0, that isn't allowed
-//        final balance is the new value of the sender's account balance
-//        if the final balance < 0, I don't have enough money throw error
-//
-//
-//    }
 
 
     private Transaction mapTransactionFromResult(SqlRowSet mapT) {
