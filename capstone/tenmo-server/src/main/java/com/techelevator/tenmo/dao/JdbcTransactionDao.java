@@ -62,7 +62,6 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactionsByUser;
     }
 
-
     @Override
     public void sendFunds(Transaction transaction) {
         final String sql = "INSERT INTO transfer (account_id_sender, account_id_receiver, amount)" +

@@ -15,5 +15,4 @@ public interface TransactionDao {
 
     void sendFunds(Transaction transaction);
 
-
 }

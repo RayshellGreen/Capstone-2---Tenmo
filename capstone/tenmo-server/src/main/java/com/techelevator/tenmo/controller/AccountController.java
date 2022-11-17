@@ -37,7 +37,7 @@ public class AccountController {
         return this.accountDao.listAllAccounts();
     }
 
-    //TODO is this needed? Maybe should be username?
+    //* TODO is this needed? Maybe should be username?
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{userId}")
     public Account findAccountByUserId(@PathVariable int userId) {
