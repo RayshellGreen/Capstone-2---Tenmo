@@ -61,39 +61,31 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/send")
-    public void sendFunds(@RequestBody Transaction transaction) throws InvalidTransfer {
+    public void sendFunds(@RequestBody Transaction transaction) throws InvalidTransfer, InvalidAmount, InsufficientFundsException {
 
         Account sender = accountDao.findAccountByUserId(transaction.getSenderId());
         Account receiver = accountDao.findAccountByUserId(transaction.getReceiverId());
 
 
-        if (sender != null && receiver != null) {
-            try {
-                if (sender.getUserId() != receiver.getUserId()) {
-                    try {
-                        if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
-                            throw new InsufficientFundsException();
-                        } else if(transaction.getAmount().intValue() > 0 ) {
-                            accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
-                            accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
-                            transactionDao.sendFunds(transaction);
-                        } else {
-                            throw new InvalidAmount();
-                        }
-
-                    } catch (InsufficientFundsException | InvalidAmount e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    throw new InvalidTransfer();
-                }
-
-            } catch (InvalidTransfer it) {
-                it.printStackTrace();
-            }
-
+        if (sender == null || receiver == null) {
+            throw new InvalidTransfer();
         }
+        if (sender.getUserId() == receiver.getUserId()) {
+            throw new InvalidTransfer();
+        }
+
+        if (!accountDao.hasSufficientFunds(transaction.getSenderId(), transaction.getAmount())) {
+            throw new InsufficientFundsException();
+        }
+        if (transaction.getAmount().intValue() <= 0) {
+            throw new InvalidAmount();
+        }
+        accountDao.subtractFromBalance(transaction.getAmount(), sender.getUserId());
+        accountDao.addToBalance(transaction.getAmount(), receiver.getUserId());
+        transactionDao.sendFunds(transaction);
+
     }
 }
+
 
 

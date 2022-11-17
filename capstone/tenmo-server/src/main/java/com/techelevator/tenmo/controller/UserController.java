@@ -27,8 +27,6 @@ public class UserController {
     }
 
 
-
-
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{username}")
     public int findIdByUsername(@PathVariable String username) {
